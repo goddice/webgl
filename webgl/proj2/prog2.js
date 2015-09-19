@@ -16,6 +16,13 @@ function init()
 
 	// x, y z coordinates of the vertices.
 	var positions = cube.vertices;
+	for (var i=0; i<positions.length; ++i)
+    {
+        for (var j=0; j<3; ++j)
+        {
+            positions[i][j] *= 0.9;
+        }
+    }
 
 	// vertex index
 	var triangles = cube.triangles;
@@ -46,8 +53,16 @@ function draw()
 	var vertexPositionLocation = gl.getAttribLocation(program, 'vertexPosition');
 	gl.vertexAttribPointer(vertexPositionLocation, 3, gl.FLOAT, false, 0, 0);
 	gl.enableVertexAttribArray(vertexPositionLocation);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffre);
+    var vertexColorLocation = gl.getAttribLocation(program, 'vertexColor');
+    gl.vertexAttribPointer(vertexColorLocation, 3, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(vertexColorLocation);
+
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, triangleBuffer);
 	gl.drawElements(gl.TRIANGLES, triangleArray.length, gl.UNSIGNED_SHORT, 0);
+
+
 }
 
 function flatten(a)
