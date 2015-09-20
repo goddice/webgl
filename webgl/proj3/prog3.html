@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Project 3</title>
+	<script type="text/javascript" src="webgl-utils.js"></script>
+	<script type="text/javascript" src="webgl-debug.js"></script>
+	<script type="text/javascript" src="cuon-utils.js"></script>
+	<script type="text/javascript" src="cuon-matrix.js"></script>
+	<script type="text/javascript" src="bunny.js"></script>
+	<script type="text/javascript" src="prog3.js"></script>
+</head>
+<body onload="init()">
+	<script id="vertexShader" type="x-shader/x-vertex">
+		precision mediump float;
+
+		uniform mat4 projectionMatrix;
+		uniform mat4 viewMatrix;
+		uniform mat4 modelMatrix;
+		attribute vec4 vertexPosition;
+		void main() {
+			gl_Position = projectionMatrix * viewMatrix * modelMatrix * vertexPosition;
+		}
+	</script>
+	<script id="fragmentShader" type="x-shader/x-fragment">
+		void main() {
+			gl_FragColor = vec4(0.5, 0.0, 0.0, 1.0);
+		}
+	</script>
+
+	<canvas id="webgl" width="500" height="500">
+		This content requires <a href="http://get.webgl.org/">WebGL</a>
+	</canvas>
+
+</body>
+</html>
