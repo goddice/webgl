@@ -12,11 +12,17 @@
 <body onload="init()">
 	<script id="vertexShader" type="x-shader/x-vertex">
 		precision mediump float;
+
+		uniform mat4 projectionMatrix;
+		uniform mat4 viewMatrix;
+		uniform mat4 modelMatrix;
+
 		attribute vec4 vertexPosition;
 		attribute vec4 vertexColor;
+
 		varying vec4 v_Color;
 		void main() {
-			gl_Position = vertexPosition;
+			gl_Position = projectionMatrix * viewMatrix * modelMatrix * vertexPosition;
 			v_Color = vertexColor;
 		}
 	</script>
