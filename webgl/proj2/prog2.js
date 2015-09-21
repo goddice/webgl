@@ -7,6 +7,8 @@ var dragging = false;
 var lastClientX;
 var lastClientY;
 
+var autoRotate = 0;
+
 function init()
 {
 	canvas = document.getElementById('webgl');
@@ -78,6 +80,13 @@ function init()
         lastClientY = ev.clientY;
         draw();
     };
+
+	//drawScene = function(){
+	//	modelRotationY = modelRotationY + 1;
+	//	draw();
+	//	requestAnimationFrame(drawScene);
+	//};
+	//requestAnimationFrame(drawScene);
 	draw();
 }
 
