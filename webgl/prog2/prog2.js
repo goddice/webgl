@@ -7,8 +7,6 @@ var dragging = false;
 var lastClientX;
 var lastClientY;
 
-var autoRotate = 0;
-
 function init()
 {
 	canvas = document.getElementById('webgl');
@@ -18,22 +16,18 @@ function init()
 	program = createProgram(gl, vertexSource, fragmentSource);
 	gl.useProgram(program);
 
+    // x, y z coordinates of the vertices.
+    var positions = cube.vertices;
+
+    // vertex index
+    var triangles = cube.triangles;
+
+    //vertex color
+    var colors = cube.colors;
+
 	positionBuffer = gl.createBuffer();
 	triangleBuffer = gl.createBuffer();
 	colorBuffre = gl.createBuffer();
-
-    projectionMatrixLocation = gl.getUniformLocation(program, "projectionMatrix");
-    viewMatrixLocation = gl.getUniformLocation(program, "viewMatrix");
-    modelMatrixLocation = gl.getUniformLocation(program, "modelMatrix");
-
-	// x, y z coordinates of the vertices.
-	var positions = cube.vertices;
-
-	// vertex index
-	var triangles = cube.triangles;
-
-	//vertext color
-	var colors = cube.colors;
 
 	positionArray = new Float32Array(flatten(positions));
 	gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -81,18 +75,12 @@ function init()
         draw();
     };
 
-	//drawScene = function(){
-	//	modelRotationY = modelRotationY + 1;
-	//	draw();
-	//	requestAnimationFrame(drawScene);
-	//};
-	//requestAnimationFrame(drawScene);
 	draw();
 }
 
 function draw()
 {
-	gl.clearColor(0.0, 0.8, 0.0, 1.0);
+	gl.clearColor(0.5, 0.5, 0.5, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT);
 
     var projectionMatrix = new Matrix4();
@@ -102,6 +90,10 @@ function draw()
     var modelMatrix = new Matrix4();
     modelMatrix.rotate(modelRotationX, 1, 0, 0);
     modelMatrix.rotate(modelRotationY, 0, 1, 0);
+
+    var projectionMatrixLocation = gl.getUniformLocation(program, "projectionMatrix");
+    var viewMatrixLocation = gl.getUniformLocation(program, "viewMatrix");
+    var modelMatrixLocation = gl.getUniformLocation(program, "modelMatrix");
 
     gl.uniformMatrix4fv(projectionMatrixLocation, false, projectionMatrix.elements);
     gl.uniformMatrix4fv(viewMatrixLocation, false, viewMatrix.elements);
