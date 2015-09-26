@@ -1,29 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Experiments on three.js</title>
-    <script src="three.js" data-ke-src="three.js"></script>
+	<title>Project 1</title>
+	<script type="text/javascript" src="webgl-utils.js"></script>
+	<script type="text/javascript" src="webgl-debug.js"></script>
+	<script type="text/javascript" src="cuon-utils.js"></script>
+	<script type="text/javascript" src="cuon-matrix.js"></script>
+	<script type="text/javascript" src="render.js"></script>
 </head>
-<body>
-    <script>
-        var scene = new THREE.Scene();
-        var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-        var renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
-        var geometry = new THREE.CubeGeometry(1, 1, 1);
-        var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
-        var cube = new THREE.Mesh(geometry, material);
-        scene.add(cube);
-        camera.position.z = 5;
-        function render()
-        {
-            requestAnimationFrame(render);
-            cube.rotation.x += 0.1;
-            cube.rotation.y += 0.1;
-            renderer.render(scene, camera);
-        }
-        render();
-    </script>
+<body onload="init()">
+	<script id="vertexShader" type="x-shader/x-vertex">
+		attribute vec4 a_Position;
+		attribute vec4 a_Color;
+		varying v_Color;
+		void main() {
+			gl_Position = a_Position;
+			gl_PointSize = 10.0;
+			v_Color = a_Color;
+		}
+	</script>
+	<script id="fragmentShader" type="x-shader/x-fragment">
+		varying v_Color;
+		void main() {
+			gl_FragColor = v_Color;
+		}
+	</script>
+
+	<canvas id="webgl" width="500" height="500">
+		This content requires <a href="http://get.webgl.org/">WebGL</a>
+	</canvas>
+
 </body>
 </html>
