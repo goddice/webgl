@@ -235,7 +235,7 @@
 			for (var i = 0; i < 2; i++) {
 				gl.bindFramebuffer(gl.FRAMEBUFFER, this.framebuffers[i]);
 				bindTexture(this.textures[1-i], 0);
-				gl.uniform1i(this.updateProgram[i].locations.texture, 0);
+				//gl.uniform1i(this.updateProgram[i].locations.texture, 0);
 				gl.useProgram(this.updateProgram[i].id);
 				
 				this.drawQuad();
