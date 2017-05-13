@@ -1,0 +1,96 @@
+<!DOCTYPE HTML> 
+<html lang="en"> 
+<head>
+<title>MP3 Part A - Environment Mapping</title>
+<meta charset="utf-8"> 
+</head>
+
+<script id="shader-vs" type="x-shader/x-vertex">
+    attribute vec3 aVertexNormal2;
+    attribute vec3 aVertexPosition2;
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+    uniform mat3 uNMatrix;
+    uniform mat4 uVWMatrix;
+
+    varying vec3 fragmentNormal;
+    varying vec3 fragmentLight;
+    varying vec3 fragmentView;
+    varying vec3 fragmentPosition;
+    const float shininess = 125.0;
+    const vec4 lightPosition = vec4(-1.0, 1.0, 1.0, 1.0);
+
+    varying vec3 vVertexNormal2;
+    void main(void) {
+        gl_Position = uPMatrix*uMVMatrix*vec4(aVertexPosition2, 1.0);
+        vVertexNormal2=aVertexNormal2;
+        vec4 p = uMVMatrix * vec4(aVertexPosition2, 1.0);
+        vec4 q = uVWMatrix * lightPosition;
+        fragmentNormal = normalize(mat3(uMVMatrix) * aVertexNormal2);
+        fragmentLight = normalize(vec3(q - p));
+        fragmentView = normalize(vec3(-p));
+        fragmentPosition = vec3(uMVMatrix * vec4(aVertexPosition2, 1.0));
+    }
+</script>
+
+<script id="shader-fs" type="x-shader/x-fragment">
+    precision mediump float;
+    uniform samplerCube uCubeSampler2;
+    uniform float type;
+    uniform mat4 inverseView;
+    varying vec3 vVertexNormal2;
+
+    varying vec3 fragmentNormal;
+    varying vec3 fragmentLight;
+    varying vec3 fragmentView;
+    varying vec3 fragmentPosition;
+    const vec3 modelColor = vec3(0.4196, 0.2588, 0.1490);
+    const vec3 lightColor = vec3(1.0, 1.0, 1.0);
+
+    void main(void) {
+        if (type < 0.0)
+        {
+            gl_FragColor = textureCube(uCubeSampler2, vVertexNormal2);
+        }
+        else if (type > 0.0 && type < 10.0)
+        {
+            vec3 n = normalize(fragmentNormal);
+            vec3 l = normalize(fragmentLight);
+            vec3 v = normalize(fragmentView);
+            vec3 h = normalize(l + v);
+            float d = max(dot(l, n), 0.0);
+            float s = pow(max(dot(h, n), 0.0), 10.0);
+            vec3 fragmentColor = modelColor * lightColor * d + lightColor * s;
+            gl_FragColor = vec4(fragmentColor, 1.0);
+        }
+        else if (type > 10.0)
+        {
+            vec3 n = normalize(vVertexNormal2);
+            vec3 v = -fragmentPosition;
+            vec3 tc = -reflect(v, n);
+            tc = vec3(inverseView * vec4(tc, 1.0));
+            gl_FragColor = textureCube(uCubeSampler2, tc);
+        }
+    }
+</script>
+
+<script src="gl-matrix-min.js"></script> 
+<script src="webgl-utils.js"></script>
+<script src="app.js"></script>
+<script src="skybox.js"></script>
+<script src="teapot.js"></script>
+
+<script src="readText.js"></script>
+<body onload="startup();">
+ <canvas id="myGLCanvas" width="800" height="800"></canvas>
+    <br><a>Press A to rotate teapot to the left, D to rotate teapot to the right.</a><br>
+    <a>Press Left to orbit perspective to the left, Right to orbit perspective to the right.</a><br><br>
+    <a>Switch between simply shading and relective: </a>
+     <form action="">
+         <input type="radio" name="shading" onclick="radBtn(this.value)" value="0" checked> Simple Shading<br>
+         <input type="radio" name="shading" onclick="radBtn(this.value)" value="1"> Reflective
+     </form>
+
+</body>
+
+</html>
