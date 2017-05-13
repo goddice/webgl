@@ -6,7 +6,7 @@ var shaderProgram;
 var lastSquareUpdateTime = Date.now();
 
 // physical parameters
-var gravity_factor = 400.0;
+var gravity_factor = 200.0;
 var friction_factor = 0.01;
 var v0 = 20.0;
 
@@ -523,6 +523,10 @@ function update() {
 //----------------------------------------------------------------------------------
 function startup() {
     particles = [];
+    for (var i = 0; i < 30; i++)
+    {
+        particles.push(new Particle());
+    }
 
     canvas = document.getElementById("myGLCanvas");
     gl = createGLContext(canvas);
