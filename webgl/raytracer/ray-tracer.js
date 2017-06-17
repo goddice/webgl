@@ -117,7 +117,7 @@ Declare_Any_Class( "Ray_Tracer",
                 color:       ( function( ray ) { return this.background_color;  } ).bind( this )
             };
         this.make_menu();
-        this.load_case( "show_homework_spec" );
+        this.load_case( "empty" );
     },
         'get_dir'( ix, iy )
         {
